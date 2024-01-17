@@ -1,4 +1,4 @@
-package com.example.demospringcours.entites;
+package com.example.demospringcours.modeles;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +13,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Personne {

@@ -1,10 +1,12 @@
 package com.example.demospringcours.dao;
 
-import com.example.demospringcours.entites.Personne;
+import com.example.demospringcours.modeles.Personne;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,25 +27,26 @@ class PersonneRepoTest {
 
     @Test
     void findByNomAndPrenom() {
-        Iterable<Personne> iterable = personneRepo.findByNomAndPrenom("Dupond", "Jean");
-        assertEquals(1, iterable.spliterator().getExactSizeIfKnown());
-        assertEquals("Dupond", iterable.iterator().next().getNom());
-        assertEquals("Jean", iterable.iterator().next().getPrenom());
-        assertEquals(30, iterable.iterator().next().getAge());
+        Collection<Personne> collection = personneRepo.findByNomAndPrenom("Dupond", "Jean");
+        assertEquals(1, collection.size());
+        Personne personne = collection.iterator().next();
+        assertEquals("Dupond", personne.getNom());
+        assertEquals("Jean", personne.getPrenom());
+        assertEquals(30, personne.getAge());
     }
 
     @Test
     void findByNom() {
-        Iterable<Personne> iterable = personneRepo.findByNom("Dupond");
-        assertEquals(3, iterable.spliterator().getExactSizeIfKnown());
-        assertEquals("Dupond", iterable.iterator().next().getNom());
+        Collection<Personne> collection = personneRepo.findByNom("Dupond");
+        assertEquals(3, collection.size());
+        assertEquals("Dupond", collection.iterator().next().getNom());
     }
 
     @Test
     void findByAge() {
-        Iterable<Personne> iterable = personneRepo.findByAge(35);
-        assertEquals(2, iterable.spliterator().getExactSizeIfKnown());
-        assertEquals(35, iterable.iterator().next().getAge());
+        Collection<Personne> collection = personneRepo.findByAge(35);
+        assertEquals(2, collection.size());
+        assertEquals(35, collection.iterator().next().getAge());
     }
 
     @Test

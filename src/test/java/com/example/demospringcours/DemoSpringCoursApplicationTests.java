@@ -1,6 +1,7 @@
 package com.example.demospringcours;
 
-import com.example.demospringcours.entites.Personne;
+import com.example.demospringcours.modeles.Commentaire;
+import com.example.demospringcours.modeles.Personne;
 import com.example.demospringcours.metier.ServicePersonne;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,9 @@ class DemoSpringCoursApplicationTests {
     void setUp() {
         assertNotNull(servicePersonne);
         servicePersonne.ajouterPersonne(new Personne(1L, "Dupond", "Jean", 30));
+        servicePersonne.ajouterPersonne(new Personne(2L, "Dupond", "Edouard", 35));
+        servicePersonne.ajouterCommentaire(servicePersonne.recupererPersonne(1L), new Commentaire("1", "Contenu 1", 1L));
+        servicePersonne.ajouterCommentaire(servicePersonne.recupererPersonne(2L), new Commentaire("2", "Contenu 2", 2L));
     }
     @Test
     void testAjout() throws Exception {
@@ -60,4 +64,24 @@ class DemoSpringCoursApplicationTests {
                 .andExpect(jsonPath("$[0].nom", isA(String.class)));
     }
 
+    @Test
+    void recupererCommentaires() throws Exception {
+        mockMvc.perform(get("/api/personnes/1/commentaires"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasItems()))
+                .andExpect(jsonPath("$[0].id", isA(String.class)))
+                .andExpect(jsonPath("$[0].contenu", isA(String.class)))
+                .andExpect(jsonPath("$[0].idAuteur", isA(Integer.class)));
+    }
+
+    @Test
+    void ajouterCommentaire() throws Exception {
+        mockMvc.perform(post("/api/personnes/1/commentaires")
+                        .contentType(MediaType.valueOf("application/json;charset=UTF-8"))
+                        .content("{\"contenu\" : \"Contenu 1\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", isA(String.class)))
+                .andExpect(jsonPath("$.contenu", isA(String.class)))
+                .andExpect(jsonPath("$.idAuteur", isA(Integer.class)));
+    }
 }

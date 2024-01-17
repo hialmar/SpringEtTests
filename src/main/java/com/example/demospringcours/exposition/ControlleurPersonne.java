@@ -1,6 +1,7 @@
 package com.example.demospringcours.exposition;
 
-import com.example.demospringcours.entites.Personne;
+import com.example.demospringcours.modeles.Commentaire;
+import com.example.demospringcours.modeles.Personne;
 import com.example.demospringcours.metier.ServicePersonne;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,18 @@ public class ControlleurPersonne {
     @GetMapping
     public Iterable<Personne> recupererPersonnes() {
         return servicePersonne.recupererPersonnes();
+    }
+
+    @GetMapping("/{id}/commentaires")
+    public Iterable<Commentaire> recupererCommentaires(@PathVariable Long id) {
+        Personne personne = servicePersonne.recupererPersonne(id);
+        return servicePersonne.recupererCommentaires(personne);
+    }
+
+    @PostMapping("/{id}/commentaires")
+    public Commentaire ajouterCommentaire(@PathVariable Long id, @RequestBody Commentaire commentaire) {
+        Personne personne = servicePersonne.recupererPersonne(id);
+        return servicePersonne.ajouterCommentaire(personne, commentaire);
     }
 
 }

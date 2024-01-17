@@ -1,6 +1,7 @@
 package com.example.demospringcours.exposition;
 
-import com.example.demospringcours.entites.Personne;
+import com.example.demospringcours.modeles.Commentaire;
+import com.example.demospringcours.modeles.Personne;
 import com.example.demospringcours.metier.ServicePersonne;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,5 +85,32 @@ class ControlleurPersonneTest {
                 .andExpect(jsonPath("$", hasItems()))
                 .andExpect(jsonPath("$[0].id", isA(Integer.class)))
                 .andExpect(jsonPath("$[0].nom", isA(String.class)));
+    }
+
+    @Test
+    void recupererCommentaires() throws Exception {
+        when(servicePersonne.recupererPersonne(anyLong())).thenReturn(new Personne(1L, "Dupond", "Jean", 30));
+        when(servicePersonne.recupererCommentaires(any(Personne.class))).thenReturn(java.util.Arrays.asList(new Commentaire("1", "Contenu 1", 1L)));
+
+        mockMvc.perform(get("/api/personnes/1/commentaires"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasItems()))
+                .andExpect(jsonPath("$[0].id", isA(String.class)))
+                .andExpect(jsonPath("$[0].contenu", isA(String.class)))
+                .andExpect(jsonPath("$[0].idAuteur", isA(Integer.class)));
+    }
+
+    @Test
+    void ajouterCommentaire() throws Exception {
+        when(servicePersonne.recupererPersonne(anyLong())).thenReturn(new Personne(1L, "Dupond", "Jean", 30));
+        when(servicePersonne.ajouterCommentaire(any(Personne.class), any(Commentaire.class))).thenReturn(new Commentaire("1", "Contenu 1", 1L));
+
+        mockMvc.perform(post("/api/personnes/1/commentaires")
+                        .contentType(MediaType.valueOf("application/json;charset=UTF-8"))
+                        .content("{\"contenu\" : \"Contenu 1\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", isA(String.class)))
+                .andExpect(jsonPath("$.contenu", isA(String.class)))
+                .andExpect(jsonPath("$.idAuteur", isA(Integer.class)));
     }
 }

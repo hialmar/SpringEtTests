@@ -1,6 +1,6 @@
 package com.example.demospringcours.dao;
 
-import com.example.demospringcours.entites.Personne;
+import com.example.demospringcours.modeles.Personne;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;
