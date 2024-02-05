@@ -20,7 +20,7 @@ public class ServicePersonne {
     }
 
     public Personne recupererPersonne(Long id) {
-        return personneRepo.findById(id).orElse(null);
+        return personneRepo.findById(id).orElseThrow();
     }
 
     public Iterable<Personne> recupererPersonnes() {

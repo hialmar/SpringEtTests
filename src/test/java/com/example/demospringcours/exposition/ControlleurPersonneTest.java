@@ -10,6 +10,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.NoSuchElementException;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.isA;
@@ -44,13 +46,18 @@ class ControlleurPersonneTest {
 
     @Test
     void recupererPersonne() throws Exception {
-        when(servicePersonne.recupererPersonne(anyLong())).thenReturn(new Personne(1L, "Dupond", "Jean", 30));
+        when(servicePersonne.recupererPersonne(1L)).thenReturn(new Personne(1L, "Dupond", "Jean", 30));
 
         mockMvc.perform(get("/api/personnes/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", isA(Integer.class)))
                 .andExpect(jsonPath("$.prenom", is("Jean")))
                 .andExpect(jsonPath("$.nom", is("Dupond")));
+
+        when(servicePersonne.recupererPersonne(2L)).thenThrow(new NoSuchElementException());
+
+        mockMvc.perform(get("/api/personnes/2"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
