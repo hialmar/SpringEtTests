@@ -1,0 +1,44 @@
+###
+GET http://localhost:8080/api/personnes
+
+###
+POST http://localhost:8080/api/personnes
+Content-Type: application/json
+
+{
+  "nom": "Joe",
+  "prenom": "Test",
+  "age": 10
+}
+
+###
+GET http://localhost:8080/api/personnes/102
+
+###
+DELETE http://localhost:8080/api/personnes/102
+
+###
+PUT http://localhost:8080/api/personnes/103
+Content-Type: application/json
+
+{
+  "nom": "Joey",
+  "prenom": "Test",
+  "age": 25
+}
+
+<> 2025-01-27T091336.200.json
+
+
+###
+GET http://localhost:8080/api/personnes/1/commentaires
+
+
+###
+POST http://localhost:8080/api/personnes/1/commentaires
+Content-Type: application/json
+
+{
+  "contenu": "Test commentaire 3",
+  "idAuteur": 1
+}
